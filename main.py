@@ -13,7 +13,9 @@ def main():
     G = nx.Graph()
 
     vertex_dict = {}
+    vertex_dictEnd = {}
     keyring = set()
+    keyringEnd = set()
 
     with open("maze.txt") as file:
         for line in file:
@@ -29,7 +31,7 @@ def main():
                 company = initialData[2]
                 type = initialData[3]
 
-                id = "" + startVillage + endVillage
+                id = "" + startVillage + " " + endVillage
 
                 if len(G.nodes) == 0:
                     G.add_node(id)
@@ -39,6 +41,10 @@ def main():
                         neighbors = vertex_dict[startVillage]
                         for neighbor in neighbors:
                             G.add_edge(id, neighbor)
+                    if endVillage in keyringEnd:
+                        neighbors = vertex_dictEnd[startVillage]
+                        for neighbor in neighbors:
+                            G.add_edge(id, neighbor)
                     
                 if startVillage not in keyring:
                     vertex_dict[startVillage] = [id]
@@ -46,6 +52,13 @@ def main():
                 else:
                     vertex_dict[startVillage].append(id)
                     keyring.add(startVillage)
+
+                if endVillage not in keyringEnd:
+                    vertex_dictEnd[endVillage] = [id]
+                    keyringEnd.add(endVillage)
+                else:
+                    vertex_dictEnd[endVillage].append(id)
+                    keyring.add(endVillage)
             
             counter += 1
 
