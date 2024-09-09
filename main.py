@@ -31,43 +31,68 @@ def main():
                 company = initialData[2]
                 type = initialData[3]
 
-                id = "" + startVillage + " " + endVillage
+                id = line
 
                 if len(G.nodes) == 0:
                     G.add_node(id)
                 else:
                     G.add_node(id)
-                    if startVillage in keyring:
-                        neighbors = vertex_dict[startVillage]
-                        for neighbor in neighbors:
-                            G.add_edge(id, neighbor)
-                    if endVillage in keyringEnd:
-                        neighbors = vertex_dictEnd[startVillage]
-                        for neighbor in neighbors:
-                            G.add_edge(id, neighbor)
                     
-                if startVillage not in keyring:
-                    vertex_dict[startVillage] = [id]
-                    keyring.add(startVillage)
-                else:
-                    vertex_dict[startVillage].append(id)
-                    keyring.add(startVillage)
+                    if len(keyring) > 0 and len(vertex_dict) > 0:
+                        if startVillage in keyring:
+                            neighbors = vertex_dict[startVillage]
+                            for neighbor in neighbors:
 
-                if endVillage not in keyringEnd:
-                    vertex_dictEnd[endVillage] = [id]
-                    keyringEnd.add(endVillage)
-                else:
-                    vertex_dictEnd[endVillage].append(id)
-                    keyring.add(endVillage)
+                                info = neighbor.split()
+                                neighborStart = info[0]
+                                neighborEnd = info[1]
+                                neighborCompany = info[2]
+                                neighborType = info[3]
+
+                                if company == neighborCompany and type == neighborType: 
+                                    G.add_edge(id, neighbor, weight = 10)
+                                elif company == neighborCompany and type != neighborType:
+                                    G.add_edge(id, neighbor, weight = 12)
+                                elif company != neighborCompany and type == neighborType:
+                                    G.add_edge(id, neighbor, weight = 15)
+
+                    if len(keyringEnd) > 0 and len(vertex_dictEnd) > 0:
+                        if endVillage in keyringEnd:
+                            neighbors = vertex_dictEnd[endVillage]
+                            for neighbor in neighbors:
+                                
+                                info = neighbor.split()
+                                neighborStart = info[0]
+                                neighborEnd = info[1]
+                                neighborCompany = info[2]
+                                neighborType = info[3]
+
+                                if company == neighborCompany and type == neighborType: 
+                                    G.add_edge(id, neighbor, weight = 10)
+                                elif company == neighborCompany and type != neighborType:
+                                    G.add_edge(id, neighbor, weight = 12)
+                                elif company != neighborCompany and type == neighborType:
+                                    G.add_edge(id, neighbor, weight = 15)
+   
+                    if startVillage not in keyring:
+                        vertex_dict[startVillage] = [id]
+                        keyring.add(startVillage)
+                    else:
+                        vertex_dict[startVillage].append(id)
+                        keyring.add(startVillage)
+
+                    if endVillage not in keyringEnd:
+                        vertex_dictEnd[endVillage] = [id]
+                        keyringEnd.add(endVillage)
+                    else:
+                        vertex_dictEnd[endVillage].append(id)
+                        keyringEnd.add(endVillage)
             
             counter += 1
 
 
     nx.draw(G, with_labels=True)
     plt.show()
-
-    shortest = nx.shortest_path(G, start, end)
-    print("shortest path is " + shortest)
 
 if __name__ == "__main__":
     main()
