@@ -18,7 +18,6 @@ def main():
     with open("maze.txt") as file:
         for line in file:
             initialData = line.split()
-            prev
             if counter == 0:
                 numVillages = int(initialData[0])
                 numLines = int(initialData[1])
@@ -27,27 +26,26 @@ def main():
             else:
                 startVillage = initialData[0]
                 endVillage = initialData[1]
-
-                if len(G.nodes) == 0:
-                    G.add_node("" + startVillage + endVillage)
-                else:
-                    G.add_node("" + startVillage + endVillage)
-                    G.
-
-                id = line
-                G.add_node(id)
-
                 company = initialData[2]
                 type = initialData[3]
 
-                if startVillage not in keyring:
-                    vertex_dict[startVillage] = []
-                    G.
-                vertex_dict[startVillage].append(endVillage)
-                    
+                id = "" + startVillage + endVillage
 
-                ver   tex_dict[startVillage]=endVillage
-                keyring.add(startVillage)
+                if len(G.nodes) == 0:
+                    G.add_node(id)
+                else:
+                    G.add_node(id)
+                    if startVillage in keyring:
+                        neighbors = vertex_dict[startVillage]
+                        for neighbor in neighbors:
+                            G.add_edge(id, neighbor)
+                    
+                if startVillage not in keyring:
+                    vertex_dict[startVillage] = [id]
+                    keyring.add(startVillage)
+                else:
+                    vertex_dict[startVillage].append(id)
+                    keyring.add(startVillage)
             
             counter += 1
 
@@ -56,6 +54,7 @@ def main():
     plt.show()
 
     shortest = nx.shortest_path(G, start, end)
+    print("shortest path is " + shortest)
 
 if __name__ == "__main__":
     main()
