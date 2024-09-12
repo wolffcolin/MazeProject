@@ -8,8 +8,6 @@ def main():
     start = "" 
     end = ""
 
-    pseudoStart = ('x', 'y', '', '')
-    pseudoEnd = ('x', 'y', '', '')
 
     startEstablished = False
     endEstablished = False
@@ -85,30 +83,40 @@ def main():
                                     G.add_edge(reverse_id, neighbor, weight = 15)
                                     print("added reverse edge between " + reverse_id[0] + reverse_id[1] + " and " + neighbor[0] + neighbor[1] + " weight 15")
 
-
-                    
-                             
-   
-                    if startVillage not in vertex_dict:
-                        vertex_dict[startVillage] = [id]
-                    else:
-                        vertex_dict[startVillage].append(id)
+                if startVillage not in vertex_dict:
+                    vertex_dict[startVillage] = [id]
+                else:
+                    vertex_dict[startVillage].append(id)
+                if endVillage not in vertex_dict:
+                    vertex_dict[endVillage] = [reverse_id]
+                else:
+                    vertex_dict[endVillage].append(reverse_id)
 
 
 
             counter += 1
 
-    #potentialStarts = vertex_dict[start]
-    #potentialEnds = vertex_dict[end]
+    potentialStarts = vertex_dict[start]
+    potentialEnds = []
+    finalNode = vertex_dict[end]
 
-    #for node in potentialStarts:
-       #G.add_edge(pseudoStart, node)
-    #for node in potentialEnds:
-        #G.add_edge(node, pseudoEnd)
+    for key in vertex_dict:
+        for node in vertex_dict[key]:
+            if node[1] == end:
+                potentialEnds.append(node)
 
-    #path, path_length = nx.single_source_dijkstra(G, source=pseudoStart, target=pseudoEnd)
-    #print(path)
-    #print(path_length)
+    G.add_node("pseudoStart")
+    G.add_node("pseudoEnd")
+
+
+    for node in potentialStarts:
+       G.add_edge("pseudoStart", node)
+    for node in potentialEnds:
+        G.add_edge(node, "pseudoEnd")
+
+    path, path_length = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
+    print(path)
+    print(path_length)
 
     printdict(vertex_dict)
 
