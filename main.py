@@ -8,7 +8,6 @@ def main():
     start = "" 
     end = ""
 
-
     startEstablished = False
     endEstablished = False
 
@@ -115,8 +114,8 @@ def main():
         G.add_edge(node, "pseudoEnd")
 
     path, path_length = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
-    print(path)
-    print(path_length)
+    #print(path)
+    #print(path_length)
 
     printdict(vertex_dict)
 
