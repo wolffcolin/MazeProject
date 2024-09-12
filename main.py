@@ -92,7 +92,7 @@ def main():
                 else:
                     vertex_dict[endVillage].append(reverse_id)
 
-
+  
 
             counter += 1
 
