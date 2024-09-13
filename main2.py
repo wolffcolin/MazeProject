@@ -1,6 +1,6 @@
 import networkx as nx
 import sys
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 #comment out plt
 #comment out plt draw
@@ -25,7 +25,7 @@ def main():
 
     outnodes = []
 
-    with open("maze4.txt") as file:
+    with open(sys.argv[1]) as file:
         for line in file:
             initialData = line.split()
             if counter == 0:
@@ -95,11 +95,6 @@ def main():
         if node[1] == end:
             potentialEnds.append(node)
 
-    print(potentialEnds)
-
-    if ('G', 'L', 'G', 'B', 'out') in G.nodes:
-        print("ITS THERE!")
-
     for node in potentialStarts:
         G.add_edge("pseudoStart", node, weight=0)
     for node in potentialEnds:
@@ -120,8 +115,6 @@ def main():
             truepath.append(path[-2][1])  
 
         truepath_str = " ".join(truepath)
-
-        print(path)
         print(length)
         print(truepath_str) 
 
