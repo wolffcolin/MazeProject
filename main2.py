@@ -1,5 +1,10 @@
 import networkx as nx
+import sys
 import matplotlib.pyplot as plt
+
+#comment out plt
+#comment out plt draw
+#change maze.txt to sys.argv[1]
 
 def main():
 
@@ -18,7 +23,9 @@ def main():
 
     masterlist = []
 
-    with open("maze.txt") as file:
+    outnodes = []
+
+    with open("maze4.txt") as file:
         for line in file:
             initialData = line.split()
             if counter == 0:
@@ -41,6 +48,9 @@ def main():
                 revInNode = (endVillage, startVillage, company, type, "in")
                 revOutNode = (endVillage, startVillage, company, type, "out")
 
+                outnodes.append(revOutNode)
+                outnodes.append(outNode)
+
                 masterlist.append(revInNode)
                 masterlist.append(revOutNode)
                 masterlist.append(inNode)
@@ -62,10 +72,7 @@ def main():
 
             counter += 1
 
-    printdict(vertex_dict)
-    print(len(vertex_dict))
-
-    for node in masterlist:
+    for node in outnodes:
         for node2 in vertex_dict[node[1]]:
             if not(node[0] == node2[1] and node[1] == node2[0]):
                     
@@ -79,36 +86,52 @@ def main():
     potentialStarts = vertex_dict[start]
     potentialEnds = []
 
-    for key in vertex_dict:
-        for node in vertex_dict[key]:
-            if node[1] == end:
-                potentialEnds.append(node)
+    #for key in vertex_dict:
+        #for node in vertex_dict[key]:
+            #if node[1] == end:
+                #potentialEnds.append(node)
+
+    for node in outnodes:
+        if node[1] == end:
+            potentialEnds.append(node)
+
+    print(potentialEnds)
+
+    if ('G', 'L', 'G', 'B', 'out') in G.nodes:
+        print("ITS THERE!")
 
     for node in potentialStarts:
         G.add_edge("pseudoStart", node, weight=0)
     for node in potentialEnds:
         G.add_edge(node, "pseudoEnd", weight=0)
 
-    length, path = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
+    try:
+        length, path = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
 
-    truepath = ""
+        truepath = []
 
-    for node in path:
-        if not(node == "pseudoStart" or node == "pseudoEnd"):
-            startCity = node[0]
-            truepath += startCity + " "
+        for node in path:
+            if not(node == "pseudoStart" or node == "pseudoEnd"):
+                if node[4] == 'in':
+                    startCity = node[0]
+                    truepath.append(startCity)
 
-    truepath += endVillage
+        if isinstance(path[-2], tuple): 
+            truepath.append(path[-2][1])  
 
-    print(length)
-    print(truepath)
+        truepath_str = " ".join(truepath)
 
-    nx.draw(G, with_labels=True)
-    plt.show()
+        print(path)
+        print(length)
+        print(truepath_str) 
+
+    except nx.NetworkXNoPath:
+        print("NO PATH")
 
 
 
-
+    #nx.draw(G, with_labels=True)
+    #plt.show()
  
 def calculateTransfer(G, node1, node2):
 
