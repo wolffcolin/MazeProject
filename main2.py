@@ -1,5 +1,5 @@
 import networkx as nx
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 def main():
 
@@ -18,7 +18,7 @@ def main():
 
     masterlist = []
 
-    with open(sys.argv[0]) as file:
+    with open("maze.txt") as file:
         for line in file:
             initialData = line.split()
             if counter == 0:
@@ -69,15 +69,11 @@ def main():
         for node2 in vertex_dict[node[1]]:
             if not(node[0] == node2[1] and node[1] == node2[0]):
                     
-                company1 = node[2]
-                company2 = node2[2]
-
-                type1 = node[3]
-                type2 = node2[3]
-                
-            else:
                 transferTime = calculateTransfer(G, node, node2)
-                G.add_edge(node, node2, weight=transferTime)
+                if not(transferTime is None):
+                    G.add_edge(node, node2, weight=transferTime)
+                
+                
 
 
     potentialStarts = vertex_dict[start]
@@ -88,24 +84,18 @@ def main():
             if node[1] == end:
                 potentialEnds.append(node)
 
-    print(potentialEnds[0])
-
     for node in potentialStarts:
-        G.add_edge("pseudoStart", node)
+        G.add_edge("pseudoStart", node, weight=0)
     for node in potentialEnds:
-        G.add_edge(node, "pseudoEnd")
-
-    for node in G.nodes:
-        if node == "pseudoEnd":
-            print("IN GRAPH")
+        G.add_edge(node, "pseudoEnd", weight=0)
 
     path, length = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
 
     print(path)
     print(length)
 
-    #nx.draw(G, with_labels=True)
-    #plt.show()
+    nx.draw(G, with_labels=True)
+    plt.show()
 
 
  
