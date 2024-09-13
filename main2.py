@@ -89,13 +89,24 @@ def main():
     for node in potentialEnds:
         G.add_edge(node, "pseudoEnd", weight=0)
 
-    path, length = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
+    length, path = nx.single_source_dijkstra(G, source="pseudoStart", target="pseudoEnd")
 
-    print(path)
+    truepath = ""
+
+    for node in path:
+        if not(node == "pseudoStart" or node == "pseudoEnd"):
+            startCity = node[0]
+            truepath += startCity + " "
+
+    truepath += endVillage
+
     print(length)
+    print(truepath)
 
     nx.draw(G, with_labels=True)
     plt.show()
+
+
 
 
  
